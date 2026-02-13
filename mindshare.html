@@ -1,74 +1,158 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindShare Game App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f0f4ff;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+<meta charset="UTF-8">
+<title>ChoreMaster</title>
+<style>
+body{
+    font-family:Arial;
+    background: linear-gradient(to bottom, #eef3ff, #a8d4ff);
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+}
 
-        .container {
-            width: 100%;
-            max-width: 500px;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
+.box{
+    width: 90%;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-top: 30px;
+    background: rgba(255,255,255,0.95);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    text-align: center;
+}
 
-        h1 {
-            text-align: center;
-            color: #2b4eff;
-            margin-bottom: 20px;
-        }
+h1{
+    color: #2b4eff;
+    margin: 0 0 15px 0;
+    font-size: 2em;
+}
 
-        input, button {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
+h3{
+    color: #333;
+    margin: 10px 0;
+}
 
-        button {
-            background: #2b4eff;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
+#points{
+    color: #2b4eff;
+    font-weight: bold;
+    font-size: 1.2em;
+}
 
-        button:hover {
-            background: #1b2fc2;
-        }
+input,select,button{
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
 
-        @media (max-width: 600px) {
-            .container {
-                margin: 10px;
-                padding: 20px;
-            }
-        }
-    </style>
+button{
+    background: #2b4eff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+button:hover{
+    background: #1b2fc2;
+}
+
+li{
+    background: #e6ebff;
+    margin: 6px 0;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: left;
+    list-style: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.clear-btn{
+    background: #ff6b6b;
+    margin-top: 15px;
+    font-size: 14px;
+    padding: 10px;
+}
+
+.clear-btn:hover{
+    background: #ff5252;
+}
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>MindShare Game App</h1>
-        <form>
-            <input type="text" placeholder="Username" required>
-            <input type="password" placeholder="Password" required>
-            <button type="submit">Play Game</button>
-        </form>
-    </div>
+<div class="box">
+<h1>🏠 ChoreMaster</h1>
+<h3 id="points">Points: 0</h3>
+
+<input id="taskName" placeholder="What chore today?">
+<select id="taskType">
+    <option>Plan</option>
+    <option>Remember</option>
+    <option>Coordinate</option>
+    <option>Execute</option>
+</select>
+<button onclick="addTask()">Add Work</button>
+
+<h3>Today's Work</h3>
+<ul id="list"></ul>
+
+<button class="clear-btn" onclick="clearAll()">Clear All</button>
+</div>
+
+<script>
+let tasks = [];
+let points = 0;
+
+function addTask(){
+    let name = document.getElementById("taskName").value.trim();
+    let type = document.getElementById("taskType").value;
+
+    if(name == ""){
+        alert("What are you going to do today?");
+        return;
+    }
+
+    let p = 0;
+    if(type == "Plan") p = 3;
+    if(type == "Remember") p = 4;
+    if(type == "Coordinate") p = 6;
+    if(type == "Execute") p = 5;
+
+    let task = name + " - " + type + " (+" + p + " pts)";
+    tasks.push(task);
+    points += p;
+
+    showList();
+    document.getElementById("points").innerText = "Points: " + points;
+    document.getElementById("taskName").value = "";
+}
+
+function showList(){
+    let ul = document.getElementById("list");
+    ul.innerHTML = "";
+    for(let i = 0; i < tasks.length; i++){
+        let li = document.createElement("li");
+        li.innerText = tasks[i];
+        ul.appendChild(li);
+    }
+}
+
+function clearAll(){
+    if(confirm("Clear all tasks?")){
+        tasks = [];
+        points = 0;
+        showList();
+        document.getElementById("points").innerText = "Points: 0";
+    }
+}
+</script>
 </body>
 </html>
